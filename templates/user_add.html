@@ -1,0 +1,32 @@
+{% extends 'base.html' %}
+{% block content_header %}
+    <h1>添加用户</h1>
+    <br>
+    <div style='background-color: silver;height:1px;border:none;'>
+{% endblock %}
+
+{#{% block main_content %}#}
+{#    {{ useradd.as_p }}#}
+{#{% endblock %}#}
+
+{% block main_content %}
+    <h5 style="color:red;margin-left: 15px"> * 为必填项 </h5>
+    <form class="form-horizontal" action="" method="post" novalidate>
+
+        {% csrf_token %}
+        {% for user in useradd %}
+            <div class="form-group">
+                <label class="col-sm-1 control-label">{{ user.label }}<span style="color:red">*</span></label>
+                <div class="col-sm-11">
+                    {{ user }}
+                    <span style="color:red">{{ user.errors.0 }}</span>
+                </div>
+            </div>
+        {% endfor %}
+        <div class=" pull-right">
+            <input type="submit" class="btn btn-primary">
+        </div>
+
+
+    </form>
+{% endblock %}
