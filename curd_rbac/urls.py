@@ -24,5 +24,6 @@ urlpatterns = [
     url(r'^users/edit/(\d+)', views.user_edit),
     url(r'^users/delete/(\d+)', views.user_delete),
     url(r'^users/', views.user),
+    url(r'^logout/', views.user),
     url(r'^$', views.index),
 ]
