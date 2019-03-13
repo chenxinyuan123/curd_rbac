@@ -1,4 +1,5 @@
 from django.shortcuts import render,redirect
+from django.http import JsonResponse,HttpResponse
 from rbac.models import *
 from django.forms import ModelForm
 
@@ -37,7 +38,19 @@ def login(request):
         user_obj = User.objects.filter(name=user,pwd=pwd).first()
         if user_obj:
             request.session["user"] = user
-            return redirect('/')
+
+            #用户的权限注册到session中
+
+            from rbac.service.permission import init_session
+            init_session(request,user_obj)
+
+            next_href = request.GET.get("next")
+            print("next_href==========>", next_href)
+
+            if next_href:
+                return redirect(next_href)
+            else:
+                return redirect("/")
 
     return render(request,"login.html")
 
@@ -45,9 +58,33 @@ def index(request):
     user = request.session["user"]
     return render(request, "index2.html",locals())
 
+class Per(object):
+    def __init__(self,action):
+        self.action = action
+    def add(self):
+        return "add" in self.action
+    def delete(self):
+        return "delete" in self.action
+    def edit(self):
+        return "edit" in self.action
+    def list(self):
+        return "list" in self.action
+
 def user(request):
 
     users_obj = User.objects.all()
+
+    for users in users_obj:
+        roles = users.roles.all()
+        ret = []
+        for role in roles:
+            ret.append(str(role))
+        val = ", ".join(ret)
+        users.r = val
+
+    action = request.actions
+    per = Per(action)
+
 
     return render(request,"users.html",locals())
 
@@ -83,5 +120,39 @@ def user_delete(request,pk):
         else:
             data["status"]=1
         print("data==========>",data)
-    return render(request, "user_add.html", {"data":data})
+    return JsonResponse(data)
+
+def role_add(request):
+    return HttpResponse("role_add")
+def role(request):
+    #role_obj = User.objects.all().values("roles__title","roles__permissions__title").distinct()
+    role_obj = Role.objects.all()
+
+    action = request.actions
+    per = Per(action)
+    for roles in role_obj:
+        permis = roles.permissions.all()
+        role_group = roles.permissions.all().values("group__title").distinct()
+        ret = []
+        for roleg in role_group:
+            ret.append(roleg["group__title"])
+
+        temp = []
+        for perm in permis:
+            temp.append(str(perm))
+        roles.a = ",".join(temp)
+        roles.role_group = ",".join(ret)
+
+    return render(request,"roles.html",{"role_obj":role_obj})
+def role_edit(request):
+    return HttpResponse("role_edit")
+def role_delete(request):
+    return HttpResponse("role_delete")
+
+
+def logout(request):
+    del request.session["user"]
+    del request.session["permissions_dict"]
+    del request.session["menuperm_list"]
+    return redirect("/login/")
 
