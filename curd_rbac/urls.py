@@ -24,6 +24,12 @@ urlpatterns = [
     url(r'^users/edit/(\d+)', views.user_edit),
     url(r'^users/delete/(\d+)', views.user_delete),
     url(r'^users/', views.user),
-    url(r'^logout/', views.user),
+    url(r'^logout/', views.logout),
+    url(r'^roles/add/', views.role_add),
+    url(r'^roles/edit/(\d+)', views.role_edit),
+    url(r'^roles/delete/(\d+)', views.role_delete),
+    url(r'^roles/', views.role),
+    url(r'^others/demo1/', views.user),
+    url(r'^others/demo2/', views.role),
     url(r'^$', views.index),
 ]

@@ -112,13 +112,13 @@ def user_delete(request,pk):
     if request.method == "POST":
         print("pk=========>",pk)
         data = {}
-        User.objects.filter(pk=pk).delete()
+        isdelete = User.objects.filter(pk=pk).delete()
         # isdelete = User.objects.filter(pk=pk)
-        isdelete = ""
+        # isdelete = ""
         if isdelete:
-            data["status"]=0
-        else:
             data["status"]=1
+        else:
+            data["status"]=0
         print("data==========>",data)
     return JsonResponse(data)
 
@@ -144,9 +144,9 @@ def role(request):
         roles.role_group = ",".join(ret)
 
     return render(request,"roles.html",{"role_obj":role_obj})
-def role_edit(request):
+def role_edit(request,pk):
     return HttpResponse("role_edit")
-def role_delete(request):
+def role_delete(request,pk):
     return HttpResponse("role_delete")
 
 
@@ -155,4 +155,7 @@ def logout(request):
     del request.session["permissions_dict"]
     del request.session["menuperm_list"]
     return redirect("/login/")
+
+def demo(request):
+    return HttpResponse("This is demo page")
 

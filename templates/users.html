@@ -3,7 +3,9 @@
     <h1>用户管理</h1>
 {% endblock %}
 {% block main_content %}
-    <a href="/users/add/" class="btn btn-primary">添加用户</a>
+    {% if per.add %}
+        <a href="/users/add/" class="btn btn-primary">添加用户</a>
+    {% endif %}
     <table class="table table-bordered table-striped" style="background-color: white">
         <thead>
         <tr>
@@ -20,11 +22,14 @@
                 <td>{{ user.id }}</td>
                 <td>{{ user.name }}</td>
                 <td>{{ user.pwd }}</td>
-                <td>{{ user.roles }}</td>
+                <td>{{ user.r }}</td>
                 <td>
-                    <a href="/users/edit/{{ user.id }}" class="btn btn-primary">编辑</a>
-                    <a href="/users/delete/{{ user.id }}" class="btn btn-danger">删除1</a>
-                    <button type="button" class="btn btn-success" onClick="foo({{ user.id }})">删除2</button>
+                    {% if per.edit %}
+                        <a href="/users/edit/{{ user.id }}" class="btn btn-primary">编辑</a>
+                    {% endif %}
+                    {% if per.delete %}
+                        <button type="button" class="btn btn-success" onClick="foo({{ user.id }},this)">删除</button>
+                    {% endif %}
                 </td>
             </tr>
         {% endfor %}
@@ -33,7 +38,7 @@
 {% endblock %}
 {% block myscript %}
     <script>
-        function foo(pk) {
+        function foo(pk,thisitem) {
             swal({
                 title:"确定删除该申请吗？",
                 type:"warning",
@@ -50,14 +55,12 @@
                         url:"/users/delete/" + pk,
                         type:"post",
                         success: function(data){
-                            /**
-                            if (JSON.parse(data).status ===1 ){
+                            if (data.status ===1 ){
                                 swal("删除成功!","已删除!","success")
+                                $(thisitem).parent().parent().remove()
                             }else {
-                                swal("删除失败!","","error")
+                                swal("删除失败!", "", "error")
                             }
-                             **/
-                            alert(data)
                         }
                     })
                 }else{

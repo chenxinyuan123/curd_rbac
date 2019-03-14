@@ -1,10 +1,36 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>$Title$</title>
-</head>
-<body>
-$END$
-</body>
-</html>
+{% extends 'base.html' %}
+{% block content_header %}
+    <h1>角色管理</h1>
+{% endblock %}
+{% block main_content %}
+    {% if per.add %}
+        <a href="/roles/add/" class="btn btn-primary">添加角色</a>
+    {% endif %}
+    <table class="table table-bordered table-striped" style="background-color: white">
+        <thead>
+        <tr>
+            <th>序号</th>
+            <th>角色名</th>
+            <th>菜单</th>
+            <th>操作</th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for role in role_obj %}
+            <tr>
+                <td>{{ role.id }}</td>
+                <td>{{ role.title }}</td>
+                <td>{{ role.role_group }}</td>
+                <td>
+                    {% if per.edit %}
+                        <a href="/roles/edit/{{ role.id }}" class="btn btn-primary">编辑</a>
+                    {% endif %}
+                    {% if per.delete %}
+                        <a href="/roles/delete/{{ role.id }}" class="btn btn-primary">删除</a>
+                    {% endif %}
+                    </td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+{% endblock %}
