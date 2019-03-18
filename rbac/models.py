@@ -20,7 +20,7 @@ class Permission(models.Model):
     url=models.CharField(max_length=32)
 
     action=models.CharField(max_length=32,default="")
-    group=models.ForeignKey("PermissionGroup",default=1)
+    group=models.ForeignKey("PermissionGroup",default=1,on_delete=True)
     def __str__(self):return self.title
 
 

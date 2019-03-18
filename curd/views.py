@@ -73,6 +73,7 @@ class Per(object):
 def user(request):
 
     users_obj = User.objects.all()
+    roles_obj = Role.objects.all()
 
     for users in users_obj:
         roles = users.roles.all()

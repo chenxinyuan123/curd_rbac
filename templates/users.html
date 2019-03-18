@@ -3,10 +3,35 @@
     <h1>用户管理</h1>
 {% endblock %}
 {% block main_content %}
+
+    <form class="form-inline pull-right" action="" method="post" novalidate>
+        {% csrf_token %}
+        <div class="form-group">
+            <label>日期:</label>
+            <div class="input-group">
+                <div class="input-group-addon">
+                    <i class="fa fa-calendar"></i>
+                </div>
+                <input type="text" class="form-control pull-right" name="daterange" id="daterange">
+            </div>
+            <!-- /.input group -->
+        </div>
+        <div class="form-group">
+            <label>角色</label>
+            <select name="select2" id="select22" class="form-control select2" multiple="multiple">
+                {% for role in roles_obj %}
+                    <option value="{{ role.pk }}">{{ role.title }}</option>
+                {% endfor %}
+            </select>
+        </div>
+        <button class="btn btn-primary" type="submit">搜索</button>
+
+    </form>
+
     {% if per.add %}
         <a href="/users/add/" class="btn btn-primary">添加用户</a>
     {% endif %}
-    <table class="table table-bordered table-striped" style="background-color: white">
+    <table id="usertable" class="table table-bordered table-striped dataTable" style="background-color: white">
         <thead>
         <tr>
             <th>序号</th>
@@ -35,38 +60,60 @@
         {% endfor %}
         </tbody>
     </table>
+
 {% endblock %}
 {% block myscript %}
     <script>
-        function foo(pk,thisitem) {
-            swal({
-                title:"确定删除该申请吗？",
-                type:"warning",
-                showCancelButton: true,
-                confirmButtonColor: "#2baab1",
-                confirmButtonText:"确定",
-                cancelButtonText:"取消",
-                closeOnConfirm: false,
-                closeOnCancel:false
-            },
-            function(isConfirm){
-                if (isConfirm){
-                    $.ajax({
-                        url:"/users/delete/" + pk,
-                        type:"post",
-                        success: function(data){
-                            if (data.status ===1 ){
-                                swal("删除成功!","已删除!","success")
-                                $(thisitem).parent().parent().remove()
-                            }else {
-                                swal("删除失败!", "", "error")
-                            }
-                        }
-                    })
-                }else{
-                    swal("取消!","已取消删除!","error")
+
+        $("#usertable").DataTable({
+            "paging": false,
+            "searching": false,
+            "order": [],
+            "columnDefs": [
+                {
+                    "orderable": false,
+                    "targets": [0, 4]
                 }
-            })
+            ],
+            "ordering": true,
+        });
+        $("#select22").select2();
+        $("#daterange").daterangepicker();
+
+
+        function foo(pk, thisitem) {
+            swal({
+                    title: "确定删除该申请吗？",
+                    type: "warning",
+                    showCancelButton: true,
+                    confirmButtonColor: "#2baab1",
+                    confirmButtonText: "确定",
+                    cancelButtonText: "取消",
+                    closeOnConfirm: false,
+                    closeOnCancel: false
+                },
+                function (isConfirm) {
+                    if (isConfirm) {
+                        $.ajax({
+                            url: "/users/delete/" + pk,
+                            type: "post",
+                            success: function (data) {
+                                if (data.status === 1) {
+                                    swal("删除成功!", "已删除!", "success")
+                                    $(thisitem).parent().parent().remove()
+                                } else {
+                                    swal("删除失败!", "", "error")
+                                }
+                            }
+                        })
+                    } else {
+                        swal("取消!", "已取消删除!", "error")
+                    }
+                })
         }
+
+
     </script>
 {% endblock %}
+
+
