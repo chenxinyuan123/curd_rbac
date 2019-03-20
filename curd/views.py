@@ -160,3 +160,5 @@ def logout(request):
 def demo(request):
     return HttpResponse("This is demo page")
 
+def assets(request):
+    return render(request,"assets.html")

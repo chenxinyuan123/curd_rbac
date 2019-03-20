@@ -29,6 +29,7 @@ urlpatterns = [
     url(r'^roles/edit/(\d+)', views.role_edit),
     url(r'^roles/delete/(\d+)', views.role_delete),
     url(r'^roles/', views.role),
+    url(r'^assets/', views.assets),
     url(r'^others/demo1/', views.user),
     url(r'^others/demo2/', views.role),
     url(r'^$', views.index),

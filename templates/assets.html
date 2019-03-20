@@ -4,17 +4,6 @@
 {% endblock %}
 {% block main_content %}
 
-    {#    导入导出按钮#}
-    <div class="html5buttons pull-right">
-        <div class="dt-buttons btn-group">
-            <a class="btn btn-default btn_import" data-toggle="modal" data-target="#asset_import_modal" tabindex="0">
-                <span>导入</span>
-            </a>
-            <a class="btn btn-default btn_export" tabindex="0">
-                <span>导出</span>
-            </a>
-        </div>
-    </div>
     <form class="form-inline pull-right" action="" method="post" novalidate>
         {% csrf_token %}
         <div class="form-group">
@@ -27,15 +16,6 @@
             </div>
             <!-- /.input group -->
         </div>
-{#        <div class="form-group">#}
-{#            <label>角色</label>#}
-{#            <select name="select2" id="select22" class="form-control select2" multiple="multiple">#}
-{#                {% for role in roles_obj %}#}
-{#                    <option value="{{ role.pk }}">{{ role.title }}</option>#}
-{#                {% endfor %}#}
-{#            </select>#}
-{#        </div>#}
-{#        <button class="btn btn-primary" type="submit">搜索</button>#}
 
     </form>
 
@@ -166,5 +146,3 @@
 
     </script>
 {% endblock %}
-
-
